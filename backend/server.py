@@ -1902,7 +1902,7 @@ async def create_team(team_data: TeamCreate, current_user: User = Depends(get_cu
     team_dict['status'] = 'Einsatzbereit'
     
     await db.teams.insert_one(team_dict)
-    return team_dict
+    return serialize_mongo_data(team_dict)
 
 @app.get("/api/admin/teams")
 async def get_teams(current_user: User = Depends(get_current_user)):
