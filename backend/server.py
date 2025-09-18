@@ -56,13 +56,24 @@ def serialize_mongo_data(data):
         for key, value in data.items():
             if isinstance(value, ObjectId):
                 result[key] = str(value)
+            elif isinstance(value, datetime):
+                result[key] = value.isoformat()
             elif isinstance(value, (dict, list)):
                 result[key] = serialize_mongo_data(value)
+            elif hasattr(value, '__dict__'):
+                result[key] = serialize_mongo_data(value.__dict__)
             else:
                 result[key] = value
+        # Always remove MongoDB's _id field
+        if "_id" in result:
+            del result["_id"]
         return result
     elif isinstance(data, ObjectId):
         return str(data)
+    elif isinstance(data, datetime):
+        return data.isoformat()
+    elif hasattr(data, '__dict__'):
+        return serialize_mongo_data(data.__dict__)
     else:
         return data
 
