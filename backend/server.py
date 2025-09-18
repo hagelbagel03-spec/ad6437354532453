@@ -1500,11 +1500,7 @@ async def create_first_user(user_data: UserCreate):
     # Return user without password
     user_dict.pop("hashed_password", None)
     
-    # Convert datetime objects to strings for JSON serialization
-    user_dict["created_at"] = user_dict["created_at"].isoformat()
-    user_dict["updated_at"] = user_dict["updated_at"].isoformat()
-    
-    return {"message": "First admin user created successfully", "user": user_dict}
+    return {"message": "First admin user created successfully", "user": serialize_mongo_data(user_dict)}
 
 # Database reset endpoint (DANGER!)
 @api_router.delete("/admin/reset-database")
