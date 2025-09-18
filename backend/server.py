@@ -2151,6 +2151,9 @@ async def get_teams(current_user: User = Depends(get_current_user)):
         print(f"❌ Fehler beim Laden der Teams: {str(e)}")
         return []
 
+# Include the API router - CRITICAL for auth and other endpoints
+app.include_router(api_router)
+
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
